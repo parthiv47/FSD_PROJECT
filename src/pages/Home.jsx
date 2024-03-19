@@ -1,6 +1,6 @@
 
 
-import Header from '../components/Header';
+
 import { Box, Typography, Button, styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { routePath } from '../routes/route';

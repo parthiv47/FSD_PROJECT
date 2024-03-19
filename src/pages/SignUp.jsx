@@ -1,172 +1,197 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import React, { useState } from 'react';
+import { Button, TextField, FormControlLabel, Checkbox, Grid, Box, Container, Typography, Avatar, createTheme, ThemeProvider, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Header from '../components/Header';
-import { Link } from 'react-router-dom'
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
-
-// TODO remove, this demo shouldn't need to reset the theme.
+import { useDispatch } from 'react-redux';
+import { signup } from '../redux/user/userActions';
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
-  const [age, setAge] = React.useState('');
+
+  const dispatch=useDispatch();
+  const navigate=useNavigate();
+  const initial={
+    name: '',
+    email: '',
+    contactNumber: '',
+    password: '',
+    role: '',
+  }
+  const [user, setUser] = useState(initial);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    const { name, value } = event.target;
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (validateForm()) {
+      console.log(user);
+      dispatch(signup(user));
+      navigate('/login')
+     setUser(initial)
+
+      // Add your form submission logic here, e.g., dispatching an action
+    }
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = {};
+
+    if (!user.name.trim()) {
+      newErrors.name = 'Name is required';
+      isValid = false;
+    }
+
+    if (!user.email.trim()) {
+      newErrors.email = 'Email is required';
+      isValid = false;
+    }
+
+    if (!user.contactNumber.trim()) {
+      newErrors.contactNumber = 'Contact number is required';
+      isValid = false;
+    }
+
+    if (!user.password.trim()) {
+      newErrors.password = 'Password is required';
+      isValid = false;
+    }
+
+    if (!user.role.trim()) {
+      newErrors.role = 'Role is required';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   return (
     <div>
-   
-
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-           
-  
-            
-            border: '1px solid #ddd', // Adjust the color and width as needed
-            borderRadius: '10px', 
-            boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-            marginTop: 12,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: '20px',
-            marginTop:"2rem",
-            backgroundColor: 'white'
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} >
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="Name"
-                  autoFocus
-                />
+      <ThemeProvider theme={defaultTheme}>
+        <Container component="main" maxWidth="xs">
+          <Box
+            sx={{
+              border: '1px solid #ddd',
+              borderRadius: '10px',
+              boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+              marginTop: 12,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: '20px',
+              marginTop: '2rem',
+              backgroundColor: 'white',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign up
+            </Typography>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    autoComplete="given-name"
+                    name="name"
+                    fullWidth
+                    id="name"
+                    label="Name"
+                    autoFocus
+                    value={user.name}
+                    onChange={handleChange}
+                    error={!!errors.name}
+                    helperText={errors.name}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    value={user.email}
+                    onChange={handleChange}
+                    error={!!errors.email}
+                    helperText={errors.email}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="contactNumber"
+                    label="Contact Number"
+                    name="contactNumber"
+                    autoComplete="tel"
+                    value={user.contactNumber}
+                    onChange={handleChange}
+                    error={!!errors.contactNumber}
+                    helperText={errors.contactNumber}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    value={user.password}
+                    onChange={handleChange}
+                    error={!!errors.password}
+                    helperText={errors.password}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControl fullWidth error={!!errors.role}>
+                    <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={user.role}
+                      label="Role"
+                      onChange={handleChange}
+                      name="role"
+                    >
+                      <MenuItem value="">Select Role</MenuItem>
+                      <MenuItem value="Jobseeker">Jobseeker</MenuItem>
+                      <MenuItem value="Employer">Employer</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
               </Grid>
-             
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="phoneNumber"
-                  label="Contact Number"
-                  name="phoneNumber"
-                  autoComplete="phoneNumber"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-              <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Role</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={age}
-                label="Age"
-                onChange={handleChange}
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
               >
-                <MenuItem value={10}>Jobseeker</MenuItem>
-                <MenuItem value={20}>Employer</MenuItem>
-                
-              </Select>
-            </FormControl>
+                Sign Up
+              </Button>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link to="/signup" className='text-center' variant="body1" >
+                    All Ready Account? SignUp
+                  </Link>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link to="/jobSeeker/signup" className='text-center' variant="body1" >
-                 Not Registered? SignUp
-                </Link>
-              </Grid>
-            </Grid>
+            </Box>
           </Box>
-        </Box>
-       
-      </Container>
-    </ThemeProvider>
-    
+        </Container>
+      </ThemeProvider>
     </div>
   );
 }

@@ -84,7 +84,7 @@ const CreatePost = () => {
     const saveJob = async (e) => {
         e.preventDefault();
         try {
-            const API_URL = 'http://localhost:8090/api';
+            const API_URL = 'http://localhost:8090/api/v1';
             const responce = await axios.post(`${API_URL}/jobposts`, data)
             console.log(responce)
             navigate("/");

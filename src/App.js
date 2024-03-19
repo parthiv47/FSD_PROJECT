@@ -12,8 +12,23 @@ import Header from './components/Header';
 import AdminDashboard from './components/AdminDashboard';
 import Login from './pages/Login';
 import AppLyJob from './components/ApplyJob';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getAllPostJobs, getAlljobposts } from './redux/postJobs/postJobsActions';
+import { getUserDetail } from './redux/user/userActions';
+
+
+
 
 function App() {
+
+  const dispatch=useDispatch()
+  useEffect(()=>{
+    dispatch(getAlljobposts())
+    // if(localStorage.jwtToken)
+    // dispatch(getUserDetail())
+ 
+  },[dispatch])
   return (
      <>
      <Header/>

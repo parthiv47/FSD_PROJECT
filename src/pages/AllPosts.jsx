@@ -5,6 +5,7 @@ import Header from '../../src/components/Header';
 import axios from 'axios';
 import SendIcon from '@mui/icons-material/Send';
 import ArrowRightOutlinedIcon from '@mui/icons-material/ArrowRightOutlined';
+import { useSelector } from 'react-redux';
 // import { getAllPosts } from '../../../server/target/api';
 
 const SearchContainer = styled(Box)({
@@ -63,24 +64,25 @@ const AllPosts = () => {
 
     const [posts, setPosts] = useState([]);
     const [text, setText] = useState("");
+    const {jobPosts}=useSelector((state)=>state.postJobs)
+
+
+
+    //    console.log(jobPosts)
+    //     const getData = async () => {
+    //         try{
+    //         const API_URL = 'http://localhost:8090/api/v1';
+    //         const respon = await axios.get(`${API_URL}/jobposts/all`);
+    //         console.log(respon.data);
+    //         setPosts(respon.data);
+    //         }
+    //      catch(err)
+    //      {
+    //         console.log(err.response) 
+    //      }
+    //     }
     
-        const getData = async () => {
-            try{
-            const API_URL = 'http://localhost:8090/api';
-            const respon = await axios.get(`${API_URL}/jobposts`);
-            console.log(respon.data);
-            setPosts(respon.data);
-            }
-         catch(err)
-         {
-            console.log(err.response) 
-         }
-        }
-    
-    useEffect(() => {
-        
-        getData();
-    }, [])
+   
 
     return (
         <>
@@ -101,8 +103,8 @@ const AllPosts = () => {
             </SearchContainer>
         
             <PostWrapper>
-                {
-                    posts.filter(post => post.profile.toLowerCase().includes(text.toLowerCase()) ||
+                {jobPosts &&
+                    jobPosts.filter(post => post.profile.toLowerCase().includes(text.toLowerCase()) ||
                     post.companyname.toLowerCase().includes(text.toLowerCase()) ||
                     post.address.toLowerCase().includes(text.toLowerCase())).map(post => (
                         <Card style={{ height: 'auto' }}>
