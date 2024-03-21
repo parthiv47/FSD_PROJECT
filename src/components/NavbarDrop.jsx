@@ -2,17 +2,25 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { logout } from '../redux/user/userActions'
+import toast from 'react-hot-toast'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function NavbarDrop() {
+  const {user,userRole}=useSelector((state)=>state.user)
+
+  const dispatch=useDispatch();
   return (
     <Menu as="div" className="relative inline-block text-left">
+
+   
       <div>
         <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-          Login
+          {user ? "Profile" : "Login"}  
           <ChevronDownIcon className="-mr-1 h-5 w-5 text-gray-400" aria-hidden="true" />
         </Menu.Button>
       </div>
@@ -28,32 +36,67 @@ export default function NavbarDrop() {
       >
         <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  to="/signup"
-                  className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm'
-                  )}
-                >
-                 SignUp
-                </Link>
+
+      {user  ? (<>
+        <Menu.Item>
+        {({ active }) => (
+          <Link
+            to="/"
+            className={classNames(
+              active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+              'block px-4 py-2 text-sm'
+            )}
+          >
+           Profile
+          </Link>
+        )}
+      </Menu.Item>
+      <Menu.Item>
+        {({ active }) => (
+          <Link
+            to="login"
+            onClick={()=> {
+              toast.success("Logout successfully")
+              dispatch(logout())}}
+            className={classNames(
+              active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+              'block px-4 py-2 text-sm'
+            )}
+          >
+          Logout
+          </Link>
+        )}
+      </Menu.Item>
+        </>) : (<> <Menu.Item>
+          {({ active }) => (
+            <Link
+              to="/signup"
+              className={classNames(
+                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                'block px-4 py-2 text-sm'
               )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  to="login"
-                  className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm'
-                  )}
-                >
-                Login
-                </Link>
+            >
+             SignUp
+            </Link>
+          )}
+        </Menu.Item>
+        <Menu.Item>
+          {({ active }) => (
+            <Link
+              to="login"
+              className={classNames(
+                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                'block px-4 py-2 text-sm'
               )}
-            </Menu.Item>
+            >
+            Login
+            </Link>
+          )}
+        </Menu.Item></>)}
+           
+        
+
+           
            
           
              

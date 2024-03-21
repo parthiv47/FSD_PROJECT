@@ -31,7 +31,7 @@ const postJobsSlice = createSlice({
       state.postError = null;
     },
     addpost:(state)=>{
-        state.loading=false;
+        state.posting=false;
     },
     clearPostError: (state) => {
       state.posting = false;

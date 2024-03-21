@@ -6,7 +6,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   user: null,
   userRole: null,
-  isLoading: false,
+  isLoading: true,
   error: null,
 };
 
@@ -22,6 +22,7 @@ const userSlice = createSlice({
       state.error = "";
     },
     adduser: (state, action) => {
+        state.user = action.payload;  
         state.isLoading = false;
     },
     userRequest: (state) => {

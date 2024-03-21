@@ -13,20 +13,26 @@ import AdminDashboard from './components/AdminDashboard';
 import Login from './pages/Login';
 import AppLyJob from './components/ApplyJob';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { getAllPostJobs, getAlljobposts } from './redux/postJobs/postJobsActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllJobPostById, getAllPostJobs, getAlljobposts } from './redux/postJobs/postJobsActions';
 import { getUserDetail } from './redux/user/userActions';
+import Postedjob from './components/PostedJob';
 
 
 
 
 function App() {
+  
 
-  const dispatch=useDispatch()
+  
+const dispatch=useDispatch()
   useEffect(()=>{
+    if(localStorage.jwtToken)
+       dispatch(getUserDetail())
+    
     dispatch(getAlljobposts())
-    // if(localStorage.jwtToken)
-    // dispatch(getUserDetail())
+   
+   
  
   },[dispatch])
   return (
@@ -40,7 +46,8 @@ function App() {
         <Route path="/applyjob" element={<AppLyJob />} />
         <Route path="/findjob" element={<AllPosts />} />
         <Route path="/creatpost" element={<CreatePost />} />
-        <Route path="/employeedashboard" element={<AdminDashboard/>} />
+        <Route path="/employeedashboard/:id" element={<AdminDashboard/>} />
+        
       </Routes>
       </>
   );

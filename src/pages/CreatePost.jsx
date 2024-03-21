@@ -5,6 +5,8 @@ import Dropdown from "../components/Dropdown";
 import { useNavigate } from "react-router-dom";
 import { routePath } from "../routes/route";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { addPostJob } from "../redux/postJobs/postJobsActions";
 
 const Component = styled(Box)({
     
@@ -54,11 +56,17 @@ const FormWrapper = styled(Box)({
 })
 
 const CreatePost = () => {
+
+    const dispatch=useDispatch();
     const [currentDate, setCurrentDate] = useState(new Date());
     const formatDate = (date) => {
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return new Intl.DateTimeFormat('en-GB', options).format(date);
     };
+
+    const { user }=useSelector((state)=>state.user)
+    const contact=user ? user.contactNumber: null;
+    const email =user ? user.email: null;
     const defaultObj = {
         profile: '',
         type: '',
@@ -68,12 +76,12 @@ const CreatePost = () => {
         salary: '',
         companyname:"",
         address:"",
+        contactNumber: contact,
+        companyemail:email,
         date: formatDate(currentDate)
     }
 
     const [data, setData] = useState(defaultObj);
-
-    const image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTH3zkKYlIHjjoQrE4e-a5xiJIaK0reWlcDhewsx8rjV87d8M82";
 
     const navigate = useNavigate();
 
@@ -83,15 +91,20 @@ const CreatePost = () => {
 
     const saveJob = async (e) => {
         e.preventDefault();
-        try {
-            const API_URL = 'http://localhost:8090/api/v1';
-            const responce = await axios.post(`${API_URL}/jobposts`, data)
-            console.log(responce)
-            navigate("/");
-        }
-        catch (error) {
-            console.log(error.message)
-        }
+
+        dispatch(addPostJob(data));
+
+        navigate("/employeedashboard/postedjob")
+
+        // try {
+        //     const API_URL = 'http://localhost:8090/api/v1';
+        //     const responce = await axios.post(`${API_URL}/jobposts`, data)
+        //     console.log(responce)
+        //     navigate("/");
+        // }
+        // catch (error) {
+        //     console.log(error.message)
+    // }
     }
 
     return (

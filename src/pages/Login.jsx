@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, TextField, FormControlLabel, Checkbox, Grid, Box, Container, Typography, Avatar, createTheme, ThemeProvider } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../redux/user/userActions';
+import { clearError } from '../redux/user/userReducer';
+import toast from 'react-hot-toast';
+
 
 const defaultTheme = createTheme();
 
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+ const [loading,SetLoading]=useState(false);
   const [user, setUser] = useState({
     email: '',
     password: '',
@@ -20,6 +23,22 @@ export default function Login() {
     email: '',
     password: '',
   });
+   const User =useSelector((state)=>state.user)
+   console.log(User.error)
+  useEffect(()=>{
+    if(User.user)
+    {
+      toast.success("login successfully")
+      navigate("/")
+     
+    }
+    else if(User.error)
+    {
+     toast.error("Invalid crediantls")
+      dispatch(clearError());
+      SetLoading(false);
+    }
+  },[dispatch,User.user,User.error,navigate])
 
   const handleChange = (event) => {
     setUser((prevUser) => ({
@@ -37,9 +56,9 @@ export default function Login() {
       });
       return;
     }
-
-    dispatch(login(user));
-    navigate("/");
+    SetLoading(true)
+    dispatch(login(user))
+    
     setUser({
       email: '',
       password: '',
@@ -60,6 +79,7 @@ export default function Login() {
               marginTop: '2rem',
               alignItems: 'center',
               padding: '20px',
+              backgroundColor: 'white',
             }}
           >
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -109,8 +129,8 @@ export default function Login() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-              >
-                Login
+               >
+               {loading  ? "loging.." :" Login"}
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>

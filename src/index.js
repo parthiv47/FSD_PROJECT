@@ -7,7 +7,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import axios from 'axios';
- // <Toaster />
+import { Toaster } from 'react-hot-toast';
+// <Toaster />
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 if (localStorage.jwtToken) {
@@ -16,15 +17,15 @@ if (localStorage.jwtToken) {
 }
 root.render(
   <React.StrictMode>
-  <BrowserRouter>
- 
-  
-   
-  <Provider store={store}>
- 
-  <App />
-</Provider>
-</BrowserRouter>
+    <BrowserRouter>
+
+
+
+      <Provider store={store}>
+      <Toaster />
+        <App />
+      </Provider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

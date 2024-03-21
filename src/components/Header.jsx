@@ -13,17 +13,22 @@ import logo from "../components/techjobs-logo-zip-file/png/logo-no-background.pn
 
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import DashboardCustomize from '@mui/icons-material/DashboardCustomize';
-import { getUserDetail } from '../redux/user/userActions';
-import { useDispatch } from 'react-redux';
+import { getUserDetail, logout } from '../redux/user/userActions';
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 
 
 
 export default function Header() {
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
+
+  const { user, userRole } = useSelector((state) => state.user)
+
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header   className=" bg-white shadow-sm " style={{ position:"sticky" ,top:0 ,right:0,left:0, zIndex: 1000}}>
+    <header className=" bg-white shadow-sm " style={{  zIndex: 1000 }}>
       <nav className=" mx-auto flex max-w-7xl items-center justify-between p-4 md:px-8 " aria-label="Global" >
         <div className="flex md:flex-1">
           <Link to="/" className="-m-1.5 p-1.5 ">
@@ -32,40 +37,43 @@ export default function Header() {
           </Link>
         </div>
         <div className="flex md:hidden">
-       
+
           <button
             type="button"
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-900"
             onClick={() => setMobileMenuOpen(true)}
           >
             <span className="sr-only">Open main menu</span>
-             {mobileMenuOpen ?(<XMarkIcon className="h-9 w-9" aria-hidden="true" />): (<Bars3Icon className="h-8 w-9" aria-hidden="true" />)}
+            {mobileMenuOpen ? (<XMarkIcon className="h-9 w-9" aria-hidden="true" />) : (<Bars3Icon className="h-8 w-9" aria-hidden="true" />)}
           </button>
         </div>
-        <Popover.Group className="hidden md:flex md:justify-start md:gap-x-12">
-         
+        <Popover.Group className="hidden md:flex md:justify-start md:gap-x-5">
+
 
           <Link to="/" className="text-center font-medium leading-6 text-gray-900">
-            
-          <HouseSharpIcon  fontSize="medium"/>
-          <div className="text-xs">Home</div>
+
+            <HouseSharpIcon fontSize="medium" />
+            <div className="text-xs">Home</div>
           </Link>
-          
-          <Link to="/findjob" className="text-base font-medium leading-6 text-gray-900">
-          <WorkIcon fontSize="medium"/>
-          <div className="text-xs">Jobs</div>
-          </Link>
-          
-            
-         
-          
-          <Link to="/employeedashboard" className="text-center font-medium leading-6 text-gray-900">
-          <DashboardCustomize fontSize="medium"/>
-          <div className="text-xs">Dashboard</div>
-          </Link>
-          <NavbarDrop/>
+
+          {userRole === "Jobseeker" &&
+            <Link to="/findjob" className="text-base font-medium leading-6 text-gray-900">
+              <WorkIcon fontSize="medium" />
+              <div className="text-xs">Jobs</div>
+            </Link>
+          }
+
+
+          {userRole === "Employer" &&
+
+            <Link to="/employeedashboard/jobposted" className="text-center font-medium leading-6 text-gray-900">
+              <DashboardCustomize fontSize="medium" />
+              <div className="text-xs">Dashboard</div>
+            </Link>
+          }
+          <NavbarDrop />
         </Popover.Group>
-       
+
       </nav>
       <Dialog as="div" className="md:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
         <div className="fixed inset-0 z-10" />
@@ -80,65 +88,84 @@ export default function Header() {
               />
             </Link>
             <button
-            type="button"
-            className="-m-2.5 rounded-md p-2.5 text-gray-700"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-             
-            <span className="sr-only">Close menu</span>
-            <XMarkIcon className="h-9 w-9" aria-hidden="true" />
-          </button>
+              type="button"
+              className="-m-2.5 rounded-md p-2.5 text-gray-700"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+
+              <span className="sr-only">Close menu</span>
+              <XMarkIcon className="h-9 w-9" aria-hidden="true" />
+            </button>
           </div>
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
-               
+
                 <Link
                   to="/"
                   onClick={() => setMobileMenuOpen(false)}
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                 Home
+                  Home
                 </Link>
-                <Link
-                  to="/findjob"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50"
-                >
+                { userRole=== "Jobseeker" &&   <Link
+                to="/findjob"
+                onClick={() => setMobileMenuOpen(false)}
+                className="-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50"
+              >
                 Jobs
-                </Link>
-                <Link
-                  to="/creatpost"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                 Post-Jobs
-                </Link>
+              </Link> }
+              {userRole ==="Employer" &&   <Link
+              to="/employeedashboard"
+              onClick={() => setMobileMenuOpen(false)}
+              className="-mx-3 block rounded-lg px-3 py-2 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50"
+            >
+              Dashboard
+            </Link>}
+              
               </div>
               <div className="py-6">
-                <Link
-                  to="/signup"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                 SignUp
-                </Link>
-                <Link
-                to="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50"
-              >
-                Login
-              </Link>
-              <Link
-              to="/"
-              onClick={() => {
-                dispatch(getUserDetail())
-                 setMobileMenuOpen(false)}}
-              className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50"
-            >
-              Logout
-            </Link>
+
+                {user ?  (<>
+                  <Link
+                    to="/"
+                    onClick={() => {
+                      dispatch(getUserDetail())
+                      setMobileMenuOpen(false)
+                    }}
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    to="/"
+                    onClick={() => {
+                      toast.success("Logout successfully")
+                      dispatch(logout())
+                      setMobileMenuOpen(false)
+                    }}
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Logout
+                  </Link>
+                </>) :(<>
+                  <Link
+                    to="/signup"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    SignUp
+                  </Link>
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-medium leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Login
+                  </Link>
+                </>)  }
+
+
               </div>
             </div>
           </div>

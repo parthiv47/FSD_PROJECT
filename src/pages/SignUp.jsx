@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, TextField, FormControlLabel, Checkbox, Grid, Box, Container, Typography, Avatar, createTheme, ThemeProvider, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signup } from '../redux/user/userActions';
+import toast from 'react-hot-toast';
+import { clearError } from '../redux/user/userReducer';
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
 
   const dispatch=useDispatch();
+  const [loading,SetLoading]=useState(false);
   const navigate=useNavigate();
   const initial={
     name: '',
@@ -29,13 +32,30 @@ export default function SignUp() {
       [name]: value,
     }));
   };
+  const User =useSelector((state)=>state.user)
+
+  console.log(User.user)
+  useEffect(()=>{
+    if(User.user)
+    {
+      toast.success("Signin successfully")
+      navigate("/login")
+     
+    }
+    else if(User &&  User.error)
+    {
+     toast.error(User.error)
+      dispatch(clearError());
+      SetLoading(false);
+    }
+  },[dispatch,User.user,User.error,navigate])
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (validateForm()) {
       console.log(user);
       dispatch(signup(user));
-      navigate('/login')
+     
      setUser(initial)
 
       // Add your form submission logic here, e.g., dispatching an action
@@ -179,12 +199,12 @@ export default function SignUp() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign Up
+              {loading  ? "Signing.." :" Signup"}
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
                   <Link to="/signup" className='text-center' variant="body1" >
-                    All Ready Account? SignUp
+                    All Ready Account? Login
                   </Link>
                 </Grid>
               </Grid>

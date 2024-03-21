@@ -55,7 +55,7 @@ export const getAlljobposts = () => async (dispatch) => {
 export const getAllJobPostById = (id) => async (dispatch) => {
     try {
       dispatch(startPosting());
-      const response = await axios.post(`http://localhost:8090/api/v1/jobposts/${id}`);
+      const response = await axios.get(`http://localhost:8090/api/v1/jobposts/${id}`);
       dispatch(employerPostJobs(response.data));
     } catch (error) {
       dispatch(postFailure(error.response.data.message));

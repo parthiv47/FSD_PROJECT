@@ -22,14 +22,20 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
+import { useEffect } from 'react';
 
 import Updatejobpost from './Updatejobpost';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllJobPostById } from '../redux/postJobs/postJobsActions';
+
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 function UpdatePost() {
+    
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -145,7 +151,20 @@ const rows = [
 
 ];
 
+
 export default function Postedjob() {
+    const {user} =useSelector((state)=>state.user)
+  
+        const dispatch=useDispatch() 
+
+   
+      useEffect(()=>{
+      if(user)
+       dispatch(getAllJobPostById(user.email))  
+    },[])
+
+    const{employerJobPosts}=useSelector((state)=>state.postJobs)
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -160,154 +179,160 @@ export default function Postedjob() {
 
     return (
         <>
-
+          {employerJobPosts ? (<>
             <Paper sx={{ width: '99%', overflow: 'hidden', marginTop: "10px" ,marginLeft:"10px",}}>
-                <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead >
-                            <TableRow >
+            <TableContainer sx={{ maxHeight: 440 }}>
+                <Table stickyHeader aria-label="sticky table">
+                    <TableHead >
+                        <TableRow >
 
-                                <TableCell
-
-                                    align="left"
-                                    style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
-                                >
-                                    Jobprofile
-                                </TableCell>
-                                <TableCell
-
-                                    align="left"
-                                    style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
-                                >
-                                    Compnayname
-                                </TableCell>
-                                <TableCell
-
-                                    align="left"
-                                    style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
-                                >
-                                    Address
-                                </TableCell>
-                                <TableCell
-
-                                    align="left"
-                                    style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
-                                >
-                                    Salary
-                                </TableCell>
-                                <TableCell
-
-                                    align="left"
-                                    style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
-                                >
-                                    Jobtype
-                                </TableCell>
-                                <TableCell
-
-                                    align="left"
-                                    style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
-                                >
-                                    Experience
-                                </TableCell>
-                                <TableCell
-
-                                    align="left"
-                                    style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
-                                >
-                                    Technology
-                                </TableCell>
-                                <TableCell
-
-                                    align="left"
-                                    style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
-                                >
-                                    Description
-                                </TableCell>
-                                <TableCell
-
-                                    align="left"
-                                    style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
-                                >
-                                    PostedOn
-                                </TableCell>
-                                <TableCell
-
-                                    align="left"
-                                    style={{ Width: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
-                                >
-
-                                </TableCell>
-                                <TableCell
+                            <TableCell
 
                                 align="left"
                                 style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
                             >
+                                Jobprofile
+                            </TableCell>
+                            <TableCell
+
+                                align="left"
+                                style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
+                            >
+                                Compnayname
+                            </TableCell>
+                            <TableCell
+
+                                align="left"
+                                style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
+                            >
+                                Address
+                            </TableCell>
+                            <TableCell
+
+                                align="left"
+                                style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
+                            >
+                                Salary
+                            </TableCell>
+                            <TableCell
+
+                                align="left"
+                                style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
+                            >
+                                Jobtype
+                            </TableCell>
+                            <TableCell
+
+                                align="left"
+                                style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
+                            >
+                                Experience
+                            </TableCell>
+                            <TableCell
+
+                                align="left"
+                                style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
+                            >
+                                Technology
+                            </TableCell>
+                            <TableCell
+
+                                align="left"
+                                style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
+                            >
+                                Description
+                            </TableCell>
+                            <TableCell
+
+                                align="left"
+                                style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
+                            >
+                                PostedOn
+                            </TableCell>
+                            <TableCell
+
+                                align="left"
+                                style={{ Width: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
+                            >
 
                             </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row) => {
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                            <TableCell
 
-                                            <TableCell align="left">
-                                                {row.profile}
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                {row.companyname}
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                {row.address}
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                {row.salary}
-                                            </TableCell>
-                                            <TableCell align="left">
-                                                {row.type}
-                                            </TableCell>
-                                            <TableCell align="left">
-                                               {row.experience}
-                                            </TableCell>
-                                            <TableCell align="left">
-                                               {row.technology}
-                                            </TableCell>
-                                            <TableCell align="left">
-                                            {row.description}
-                                            </TableCell>
+                            align="left"
+                            style={{ minWidth: "3rem", backgroundColor: "rgb(3 7 18)", color: "white", fontSize: "1rem" }}
+                        >
 
-                                            <TableCell align="left">
-                                            {row.date}
-                                            </TableCell>
-                                            <TableCell align="left"  >
-                                             <UpdatePost/>
-                                            
-                                            </TableCell>
-                                            <TableCell align="left"  >
-                                            
-                                            <Button variant="contained" onClick="hello" color="error">Delete</Button>
-                                            </TableCell>
+                        </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                          {employerJobPosts
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((row) => {
+                                return (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+
+                                        <TableCell align="left">
+                                            {row.profile}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            {row.companyname}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            {row.address}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            {row.salary}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            {row.type}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                           {row.experience}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                           {row.technology}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                        {row.description}
+                                        </TableCell>
+
+                                        <TableCell align="left">
+                                        {row.date}
+                                        </TableCell>
+                                        <TableCell align="left"  >
+                                         <UpdatePost/>
+                                        
+                                        </TableCell>
+                                        <TableCell align="left" >
+                                        
+                                        <Button variant="contained" onClick="hello" color="error">Delete</Button>
+                                        </TableCell>
 
 
 
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>
+                                    </TableRow>
+                                );
+                            })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[10, 25, 100]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+        </Paper>
+
+
+            </>):(<h1>NO job found</h1>)}
+                       
         </>
+
+
     );
 }
